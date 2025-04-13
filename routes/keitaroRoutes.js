@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getCampaigns } = require('../services/keitaroService');
+const { getCampaigns, getFormattedCampaigns } = require('../services/keitaroService');
 
 router.get('/campaigns', async (req, res) => {
   try {
