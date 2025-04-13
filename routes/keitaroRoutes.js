@@ -12,3 +12,15 @@ router.get('/campaigns', async (req, res) => {
 });
 
 module.exports = router;
+
+
+exports.getFormattedCampaigns = async () => {
+  const { data } = await keitaroApi.get('/campaigns');
+
+  return data.map(c => ({
+    ID: c.id,
+    Название: c.name,
+    Включена: c.enabled,
+    "Дата создания": new Date(c.created_at).toLocaleDateString('ru-RU')
+  }));
+};
