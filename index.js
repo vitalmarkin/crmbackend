@@ -21,3 +21,6 @@ app.use('/api/upload', uploadRoutes);
 // Старт сервера
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
+
+const keitaroRoutes = require('./routes/keitaroRoutes');
+app.use('/api/keitaro', keitaroRoutes);
