@@ -67,3 +67,60 @@ router.get('/campaigns/table', async (req, res) => {
   res.status(500).send('Ошибка при загрузке данных из Keitaro');
   }
 });
+
+
+const { getTrafficReport } = require('../services/keitaroService');
+
+router.get('/traffic', async (req, res) => {
+  const { from, to, campaign_id } = req.query;
+
+  try {
+    const report = await getTrafficReport({
+      from: from || '2024-04-01',
+      to: to || '2024-04-30',
+      campaignId: campaign_id || 1
+    });
+
+    // Формируем HTML-таблицу
+    let html = `
+      <html>
+      <head>
+        <title>Traffic Report</title>
+        <style>
+          body { font-family: sans-serif; padding: 20px; }
+          table { border-collapse: collapse; width: 100%; }
+          th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+          th { background-color: #f0f0f0; }
+        </style>
+      </head>
+      <body>
+        <h2>Отчёт по трафику кампании ${campaign_id}</h2>
+        <table>
+          <thead><tr>
+    `;
+
+    report.header.forEach(col => {
+      html += `<th>${col}</th>`;
+    });
+
+    html += `</tr></thead><tbody>`;
+
+    report.rows.forEach(row => {
+      html += `<tr>`;
+      row.forEach(cell => {
+        html += `<td>${cell}</td>`;
+      });
+      html += `</tr>`;
+    });
+
+    html += `
+        </tbody></table>
+      </body></html>
+    `;
+
+    res.send(html);
+  } catch (err) {
+    console.error('Ошибка отчёта по трафику:', err.response?.data || err.message);
+    res.status(500).send('Не удалось получить отчёт по трафику');
+  }
+});
