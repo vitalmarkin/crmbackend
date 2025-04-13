@@ -63,7 +63,7 @@ router.get('/campaigns/table', async (req, res) => {
 
     res.send(html);
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Ошибка при загрузке данных из Keitaro');
+  console.error('Ошибка Keitaro:', err.response?.data || err.message || err);
+  res.status(500).send('Ошибка при загрузке данных из Keitaro');
   }
 });
