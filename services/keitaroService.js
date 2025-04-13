@@ -30,3 +30,16 @@ exports.getFormattedCampaigns = async () => {
   }));
 };
 
+exports.getTrafficReport = async ({ from, to, campaignId }) => {
+  const params = {
+    range: 'custom',
+    date_from: from,
+    date_to: to,
+    filters: [{ name: 'campaign_id', operator: 'EQUALS', expression: campaignId }],
+    columns: ['campaign_name', 'visits', 'clicks', 'conversions', 'revenue', 'cost', 'profit', 'roi']
+  };
+
+  const { data } = await keitaroApi.post('/report/traffic/table', params);
+  return data;
+};
+
