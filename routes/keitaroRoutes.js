@@ -120,7 +120,7 @@ router.get('/traffic', async (req, res) => {
 
     res.send(html);
   } catch (err) {
-    console.error('Ошибка отчёта по трафику:', err.response?.data || err.message);
+console.error('[KEITARO TRAFFIC ERROR]', JSON.stringify(err.response?.data || err.message || err));
     res.status(500).send('Не удалось получить отчёт по трафику');
   }
 });
