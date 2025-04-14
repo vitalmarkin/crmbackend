@@ -1,5 +1,5 @@
 const axios = require('axios');
-require('dotenv').config();
+
 
 const keitaroApi = axios.create({
   baseURL: process.env.KEITARO_API_URL,
