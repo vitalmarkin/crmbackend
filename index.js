@@ -24,3 +24,24 @@ app.listen(PORT, () => console.log(`Сервер запущен на порту 
 
 const keitaroRoutes = require('./routes/keitaroRoutes');
 app.use('/api/keitaro', keitaroRoutes);
+
+const express = require('express');
+const app = express();
+const cors = require('cors');
+
+app.use(cors());
+app.use(express.json());
+
+// Подключаем наш новый роут
+const dealRoutes = require('./routes/deals');
+app.use('/api/deals', dealRoutes);
+
+// Остальные маршруты
+const keitaroRoutes = require('./routes/keitaroRoutes');
+app.use('/api/keitaro', keitaroRoutes);
+
+// Запуск сервера
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => {
+  console.log(`Сервер запущен на порту ${PORT}`);
+});
