@@ -3,8 +3,8 @@ const axios = require("axios");
 const keitaroApi = axios.create({
   baseURL: process.env.KEITARO_API_URL,
   headers: {
-    "Api-Key": process.env.KEITARO_API_KEY
-    // Без Content-Type — Keitaro не любит application/json
+    "Api-Key": process.env.KEITARO_API_KEY,
+    "Content-Type": "application/json",
   },
 });
 
@@ -30,8 +30,9 @@ exports.getFormattedCampaigns = async () => {
 };
 
 exports.getTrafficReport = async ({ from, to, campaignId }) => {
-  console.log("[KEITARO REPORT REQUEST]", {
-    campaignId: Number(campaignId),
+  console.log("[KEITARO REQUEST PARAMS]", {
+    baseURL: process.env.KEITARO_API_URL,
+    campaignId,
     from,
     to,
   });
@@ -44,7 +45,7 @@ exports.getTrafficReport = async ({ from, to, campaignId }) => {
       {
         name: "campaign_id",
         operator: "EQUALS",
-        expression: Number(campaignId),
+        expression: campaignId,
       },
     ],
     columns: [
@@ -61,7 +62,6 @@ exports.getTrafficReport = async ({ from, to, campaignId }) => {
 
   try {
     const { data } = await keitaroApi.post("/report/traffic/table", params);
-    console.log("[KEITARO REPORT SUCCESS]", Array.isArray(data.rows) ? `Rows: ${data.rows.length}` : "No rows");
     return data;
   } catch (err) {
     console.error("[KEITARO TRAFFIC ERROR]", err?.response?.data || err.message || err);
