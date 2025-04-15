@@ -25,7 +25,7 @@ app.listen(PORT, () => console.log(`Сервер запущен на порту 
 const keitaroRoutes = require('./routes/keitaroRoutes');
 app.use('/api/keitaro', keitaroRoutes);
 
-const express = require('express');
+
 const app = express();
 const cors = require('cors');
 
