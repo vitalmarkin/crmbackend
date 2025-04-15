@@ -3,8 +3,8 @@ const axios = require("axios");
 const keitaroApi = axios.create({
   baseURL: process.env.KEITARO_API_URL,
   headers: {
-    "Api-Key": process.env.KEITARO_API_KEY,
-    "Content-Type": "application/json",
+    "Api-Key": process.env.KEITARO_API_KEY
+    // Убираем Content-Type — Keitaro сам определяет формат
   },
 });
 
@@ -29,42 +29,15 @@ exports.getFormattedCampaigns = async () => {
   }));
 };
 
+// ВРЕМЕННЫЙ ТЕСТОВЫЙ ЗАПРОС — просто получаем список кампаний
 exports.getTrafficReport = async ({ from, to, campaignId }) => {
-  console.log("[KEITARO REQUEST PARAMS]", {
-    baseURL: process.env.KEITARO_API_URL,
-    campaignId,
-    from,
-    to,
-  });
-
-  const params = {
-    range: "custom",
-    date_from: from,
-    date_to: to,
-    filters: [
-      {
-        name: "campaign_id",
-        operator: "EQUALS",
-        expression: campaignId,
-      },
-    ],
-    columns: [
-      "campaign_name",
-      "visits",
-      "clicks",
-      "conversions",
-      "revenue",
-      "cost",
-      "profit",
-      "roi",
-    ],
-  };
-
+  console.log("[KEITARO TEST MODE]");
   try {
-    const { data } = await keitaroApi.post("/report/traffic/table", params);
-    return data;
+    const response = await keitaroApi.get("/campaigns");
+    console.log("[KEITARO RESPONSE SAMPLE]", response.data?.[0]);
+    return { rows: [["Тест", 0, 0, 0, 0]] };
   } catch (err) {
-    console.error("[KEITARO TRAFFIC ERROR]", err?.response?.data || err.message || err);
+    console.error("[KEITARO TEST ERROR]", err?.response?.data || err.message);
     throw err;
   }
 };
